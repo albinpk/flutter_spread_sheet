@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:spread_sheet/src/sheet_state.dart';
-import 'package:spread_sheet/src/utils/extensions.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:spread_sheet/src/providers/sheet_provider.dart';
 import 'package:spread_sheet/src/widget/drag_handle.dart';
 
-class RowAddress extends StatelessWidget {
+class RowAddress extends ConsumerWidget {
   const RowAddress({required this.index, super.key});
 
   final int index;
 
   @override
-  Widget build(BuildContext context) {
-    final selected =
-        context.model(ModelType.selectedCell).selectedCell?.row == index;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final notifier = ref.watch(sheetProvider.notifier);
+    final selected = ref.watch(
+      sheetProvider.select((v) => v.selectedCell?.row == index),
+    );
     return ColoredBox(
       color: selected ? Colors.black26 : Colors.transparent,
       child: Stack(
@@ -26,9 +28,7 @@ class RowAddress extends StatelessWidget {
             alignment: Alignment.bottomCenter,
             child: DragHandle(
               axis: Axis.vertical,
-              onUpdate: (value) {
-                context.state.changeRowSize(index, value);
-              },
+              onUpdate: (value) => notifier.changeRowSize(index, value),
             ),
           ),
         ],

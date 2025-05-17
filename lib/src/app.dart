@@ -1,56 +1,80 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:spread_sheet/src/models/cell_id.dart';
-import 'package:spread_sheet/src/sheet_state.dart';
-import 'package:spread_sheet/src/sheet_view.dart';
+import 'package:spread_sheet/src/providers/sheet_provider.dart';
+import 'package:spread_sheet/src/widget/column_address.dart';
+import 'package:spread_sheet/src/widget/row_address.dart';
+import 'package:spread_sheet/src/widget/sheet_cell.dart';
+import 'package:two_dimensional_scrollables/two_dimensional_scrollables.dart';
 
-class App extends StatefulWidget {
+class App extends ConsumerWidget {
   const App({super.key});
 
   @override
-  State<App> createState() => AppState();
-}
-
-class AppState extends State<App> {
-  CellId? _selectedCell;
-
-  final Map<int, double> _rowSize = {};
-  final Map<int, double> _colSize = {};
-
-  @override
-  Widget build(BuildContext context) {
-    return SheetModel(
-      selectedCell: _selectedCell,
-      rowSize: _rowSize,
-      colSize: _colSize,
-      child: const Scaffold(
-        body: Padding(padding: EdgeInsets.all(8), child: SheetView()),
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.all(8),
+        child: TableView.builder(
+          verticalDetails: const ScrollableDetails.vertical(
+            physics: ClampingScrollPhysics(),
+          ),
+          horizontalDetails: const ScrollableDetails.horizontal(
+            physics: ClampingScrollPhysics(),
+          ),
+          pinnedColumnCount: 1,
+          pinnedRowCount: 1,
+          diagonalDragBehavior: DiagonalDragBehavior.free,
+          columnBuilder: (i) => _columnBuilder(i, ref),
+          rowBuilder: (i) => _rowBuilder(i, ref),
+          cellBuilder: _cellBuilder,
+        ),
       ),
     );
   }
 
-  static AppState of(BuildContext context) {
-    return context.findAncestorStateOfType<AppState>()!;
+  TableSpan _columnBuilder(int index, WidgetRef ref) {
+    final size = ref.watch(
+      sheetProvider.select((v) => v.getColSize(index - 1)),
+    );
+    return TableSpan(
+      extent: index == 0 ? const FixedSpanExtent(40) : FixedSpanExtent(size),
+      backgroundDecoration: const SpanDecoration(
+        border: SpanBorder(
+          leading: BorderSide(color: Colors.black12, width: 0.5),
+          trailing: BorderSide(color: Colors.black12, width: 0.5),
+        ),
+      ),
+    );
   }
 
-  void focusCell(CellId id) {
-    setState(() => _selectedCell = id);
+  TableSpan _rowBuilder(int index, WidgetRef ref) {
+    final size = ref.watch(
+      sheetProvider.select((v) => v.getRowSize(index - 1)),
+    );
+    return TableSpan(
+      extent: FixedSpanExtent(size),
+      backgroundDecoration: const SpanDecoration(
+        border: SpanBorder(
+          leading: BorderSide(color: Colors.black12, width: 0.5),
+          trailing: BorderSide(color: Colors.black12, width: 0.5),
+        ),
+      ),
+    );
   }
 
-  void focusDown() {
-    if (_selectedCell == null) return;
-    focusCell(_selectedCell!.down);
-  }
-
-  void changeColSize(int col, double size) {
-    final newSize = (_colSize[col] ?? SheetView.colSize) + size;
-    if (newSize < 30) return;
-    setState(() => _colSize[col] = newSize);
-  }
-
-  void changeRowSize(int row, double size) {
-    final i = row - 1; // title row
-    final newSize = (_rowSize[i] ?? SheetView.rowSize) + size;
-    if (newSize < 30) return;
-    setState(() => _rowSize[i] = newSize);
+  TableViewCell _cellBuilder(BuildContext context, TableVicinity vicinity) {
+    return TableViewCell(
+      child:
+          vicinity.row == 0 && vicinity.column == 0
+              ? const SizedBox.shrink()
+              : vicinity.row == 0
+              ? ColumnAddress(index: vicinity.column - 1)
+              : vicinity.column == 0
+              ? RowAddress(index: vicinity.row)
+              : SheetCell(
+                id: CellId(row: vicinity.row, col: vicinity.column - 1),
+              ),
+    );
   }
 }

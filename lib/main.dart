@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:spread_sheet/src/app.dart';
 
 void main() {
-  runApp(const MainApp());
+  runApp(const ProviderScope(child: Root()));
 }
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+class Root extends StatelessWidget {
+  const Root({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: App(),
+      home: const App(),
       theme: ThemeData.light().copyWith(
-        inputDecorationTheme: InputDecorationTheme(
+        inputDecorationTheme: const InputDecorationTheme(
           border: OutlineInputBorder(borderSide: BorderSide.none),
           focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.zero),
         ),

@@ -1,53 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:spread_sheet/src/models/cell_id.dart';
-import 'package:spread_sheet/src/sheet_state.dart';
-import 'package:spread_sheet/src/utils/extensions.dart';
+import 'package:spread_sheet/src/providers/sheet_provider.dart';
 
-class SheetCell extends StatefulWidget {
+class SheetCell extends HookConsumerWidget {
   const SheetCell({required this.id, super.key});
 
   final CellId id;
 
   @override
-  State<SheetCell> createState() => _SheetCellState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final focusNode = useFocusNode();
+    final notifier = ref.watch(sheetProvider.notifier);
+    ref.listen(sheetProvider, (_, next) {
+      if (next.selectedCell == id) focusNode.requestFocus();
+    });
+    useOnListenableChange(focusNode, () {
+      if (focusNode.hasPrimaryFocus) notifier.focusCell(id);
+    });
 
-class _SheetCellState extends State<SheetCell> {
-  final _focusNode = FocusNode();
-
-  @override
-  void initState() {
-    super.initState();
-    _focusNode.addListener(_onFocusChanged);
-  }
-
-  @override
-  void dispose() {
-    _focusNode.dispose();
-    super.dispose();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final selectedCell = context.model(ModelType.selectedCell).selectedCell;
-    if (selectedCell == widget.id && !_focusNode.hasPrimaryFocus) {
-      _focusNode.requestFocus();
-    }
-  }
-
-  void _onFocusChanged() {
-    if (_focusNode.hasPrimaryFocus) {
-      context.state.focusCell(widget.id);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return ClipRect(
       child: TextField(
-        focusNode: _focusNode,
-        onSubmitted: (_) => context.state.focusDown(),
+        focusNode: focusNode,
+        onSubmitted: (_) => notifier.focusDown(),
         textAlignVertical: TextAlignVertical.top,
         cursorHeight: 16,
         expands: true,

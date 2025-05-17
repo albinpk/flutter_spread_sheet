@@ -1,0 +1,10 @@
+targets:
+  $default:
+    builders:
+      freezed:
+        generate_for:
+          - lib/src/providers/sheet_state.dart
+          - lib/src/models/cell_id.dart
+      riverpod_generator:
+        generate_for:
+          - lib/src/providers/sheet_provider.dart
