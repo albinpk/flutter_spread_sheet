@@ -44,13 +44,18 @@ class _SheetCellState extends State<SheetCell> {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      focusNode: _focusNode,
-      onSubmitted: (_) => context.state.focusDown(),
-      textAlignVertical: TextAlignVertical.center,
-      cursorHeight: 18,
-      decoration: const InputDecoration(
-        contentPadding: EdgeInsets.symmetric(horizontal: 6),
+    return ClipRect(
+      child: TextField(
+        focusNode: _focusNode,
+        onSubmitted: (_) => context.state.focusDown(),
+        textAlignVertical: TextAlignVertical.top,
+        cursorHeight: 16,
+        expands: true,
+        maxLines: null,
+        decoration: const InputDecoration(
+          // isCollapsed: true,
+          contentPadding: EdgeInsets.symmetric(horizontal: 4, vertical: 6),
+        ),
       ),
     );
   }

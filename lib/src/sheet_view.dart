@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:spread_sheet/src/models/cell_id.dart';
+import 'package:spread_sheet/src/sheet_state.dart';
+import 'package:spread_sheet/src/utils/extensions.dart';
 import 'package:spread_sheet/src/widget/column_address.dart';
 import 'package:spread_sheet/src/widget/row_address.dart';
 import 'package:spread_sheet/src/widget/sheet_cell.dart';
@@ -20,16 +22,19 @@ class SheetView extends StatelessWidget {
       pinnedColumnCount: 1,
       pinnedRowCount: 1,
       diagonalDragBehavior: DiagonalDragBehavior.free,
-      columnBuilder: _columnBuilder,
-      rowBuilder: _rowBuilder,
+      columnBuilder: (i) => _columnBuilder(i, context),
+      rowBuilder: (i) => _rowBuilder(i, context),
       cellBuilder: _cellBuilder,
     );
   }
 
-  TableSpan _columnBuilder(int index) {
+  static const colSize = 120.0;
+  static const rowSize = 30.0;
+
+  TableSpan _columnBuilder(int index, BuildContext context) {
+    final size = context.model(ModelType.colSize).colSize[index - 1] ?? colSize;
     return TableSpan(
-      extent:
-          index == 0 ? const FixedSpanExtent(40) : const FixedSpanExtent(120),
+      extent: index == 0 ? const FixedSpanExtent(40) : FixedSpanExtent(size),
       backgroundDecoration: const SpanDecoration(
         border: SpanBorder(
           leading: BorderSide(color: Colors.black12, width: 0.5),
@@ -39,10 +44,11 @@ class SheetView extends StatelessWidget {
     );
   }
 
-  TableSpan _rowBuilder(int index) {
-    return const TableSpan(
-      extent: FixedSpanExtent(30),
-      backgroundDecoration: SpanDecoration(
+  TableSpan _rowBuilder(int index, BuildContext context) {
+    final size = context.model(ModelType.rowSize).rowSize[index - 1] ?? rowSize;
+    return TableSpan(
+      extent: FixedSpanExtent(size),
+      backgroundDecoration: const SpanDecoration(
         border: SpanBorder(
           leading: BorderSide(color: Colors.black12, width: 0.5),
           trailing: BorderSide(color: Colors.black12, width: 0.5),

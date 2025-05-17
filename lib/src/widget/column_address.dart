@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:spread_sheet/src/sheet_state.dart';
 import 'package:spread_sheet/src/utils/extensions.dart';
+import 'package:spread_sheet/src/widget/drag_handle.dart';
 
 class ColumnAddress extends StatelessWidget {
   const ColumnAddress({required this.index, super.key});
@@ -12,12 +13,25 @@ class ColumnAddress extends StatelessWidget {
     final selected =
         context.model(ModelType.selectedCell).selectedCell?.col == index;
     return ColoredBox(
-      color: selected ? Colors.grey : Colors.transparent,
-      child: Center(
-        child: Text(
-          _getTitle(index),
-          style: const TextStyle(fontWeight: FontWeight.w500),
-        ),
+      color: selected ? Colors.black26 : Colors.transparent,
+      child: Stack(
+        children: [
+          Center(
+            child: Text(
+              _getTitle(index),
+              style: const TextStyle(fontWeight: FontWeight.w500),
+            ),
+          ),
+          Align(
+            alignment: Alignment.centerRight,
+            child: DragHandle(
+              axis: Axis.horizontal,
+              onUpdate: (value) {
+                context.state.changeColSize(index, value);
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
