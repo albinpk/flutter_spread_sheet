@@ -15,8 +15,9 @@ class Root extends StatelessWidget {
       home: const App(),
       theme: ThemeData.light().copyWith(
         inputDecorationTheme: const InputDecorationTheme(
-          border: OutlineInputBorder(borderSide: BorderSide.none),
-          focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.zero),
+          border: InputBorder.none,
+          // border: OutlineInputBorder(borderSide: BorderSide.none),
+          // focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.zero),
         ),
       ),
     );

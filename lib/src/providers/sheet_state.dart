@@ -9,6 +9,7 @@ abstract class SheetState with _$SheetState {
     CellId? selectedCell,
     @Default({}) Map<int, double> rowSize,
     @Default({}) Map<int, double> colSize,
+    @Default({}) Map<int, Map<int, CellData>> data,
   }) = _SheetState;
 
   const SheetState._();
@@ -16,4 +17,11 @@ abstract class SheetState with _$SheetState {
   double getColSize(int index) => colSize[index] ?? 120;
 
   double getRowSize(int index) => rowSize[index] ?? 30;
+
+  CellData? getCellData(CellId id) => data[id.row]?[id.col];
+}
+
+@freezed
+abstract class CellData with _$CellData {
+  const factory CellData({required String value}) = _CellData;
 }

@@ -33,6 +33,8 @@ class App extends ConsumerWidget {
     );
   }
 
+  static const _border = BorderSide(color: Colors.black12, width: 0.5);
+
   TableSpan _columnBuilder(int index, WidgetRef ref) {
     final size = ref.watch(
       sheetProvider.select((v) => v.getColSize(index - 1)),
@@ -40,10 +42,7 @@ class App extends ConsumerWidget {
     return TableSpan(
       extent: index == 0 ? const FixedSpanExtent(40) : FixedSpanExtent(size),
       backgroundDecoration: const SpanDecoration(
-        border: SpanBorder(
-          leading: BorderSide(color: Colors.black12, width: 0.5),
-          trailing: BorderSide(color: Colors.black12, width: 0.5),
-        ),
+        border: SpanBorder(leading: _border, trailing: _border),
       ),
     );
   }
@@ -55,10 +54,7 @@ class App extends ConsumerWidget {
     return TableSpan(
       extent: FixedSpanExtent(size),
       backgroundDecoration: const SpanDecoration(
-        border: SpanBorder(
-          leading: BorderSide(color: Colors.black12, width: 0.5),
-          trailing: BorderSide(color: Colors.black12, width: 0.5),
-        ),
+        border: SpanBorder(leading: _border, trailing: _border),
       ),
     );
   }

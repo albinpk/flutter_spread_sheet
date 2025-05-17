@@ -32,4 +32,13 @@ class Sheet extends _$Sheet {
     if (newSize < 30) return;
     state = state.copyWith(rowSize: {...state.rowSize, i: newSize});
   }
+
+  void setCellData(CellId id, String value) {
+    state = state.copyWith(
+      data: {
+        ...state.data,
+        id.row: {...?state.data[id.row], id.col: CellData(value: value)},
+      },
+    );
+  }
 }

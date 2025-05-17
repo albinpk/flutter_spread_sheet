@@ -13,23 +13,39 @@ class SheetCell extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final focusNode = useFocusNode();
     final notifier = ref.watch(sheetProvider.notifier);
-    ref.listen(sheetProvider, (_, next) {
-      if (next.selectedCell == id) focusNode.requestFocus();
-    });
     useOnListenableChange(focusNode, () {
       if (focusNode.hasPrimaryFocus) notifier.focusCell(id);
     });
 
-    return ClipRect(
+    final (selected, data) = ref.watch(
+      sheetProvider.select((v) {
+        return (v.selectedCell == id, v.getCellData(id));
+      }),
+    );
+    final controller = useTextEditingController(text: data?.value);
+
+    ref.listen(sheetProvider, (_, next) {
+      if (next.selectedCell == id) focusNode.requestFocus();
+    });
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        border:
+            selected
+                ? Border.all()
+                : const Border.fromBorderSide(BorderSide.none),
+      ),
       child: TextField(
+        controller: controller,
         focusNode: focusNode,
         onSubmitted: (_) => notifier.focusDown(),
+        onChanged: (value) => notifier.setCellData(id, value),
         textAlignVertical: TextAlignVertical.top,
         cursorHeight: 16,
-        expands: true,
-        maxLines: null,
+        // expands: true,
+        // maxLines: null,
         decoration: const InputDecoration(
-          // isCollapsed: true,
+          isCollapsed: true,
           contentPadding: EdgeInsets.symmetric(horizontal: 4, vertical: 6),
         ),
       ),
