@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:spread_sheet/src/enums.dart';
 import 'package:spread_sheet/src/models/cell_id.dart';
 
 part 'sheet_state.freezed.dart';
@@ -12,7 +13,7 @@ abstract class SheetState with _$SheetState {
     @Default({}) Map<int, double> colSize,
     @Default({}) Map<int, Map<int, CellData>> data,
     @Default(100) int rowCount,
-    @Default(30) int colCount,
+    @Default(27) int colCount,
   }) = _SheetState;
 
   const SheetState._();
@@ -21,7 +22,7 @@ abstract class SheetState with _$SheetState {
 
   double getRowSize(int index) => rowSize[index] ?? 30;
 
-  CellData? getCellData(CellId id) => data[id.row]?[id.col];
+  CellData getCellData(CellId id) => data[id.row]?[id.col] ?? CellData.empty;
 
   bool isCellSelected(CellId id) => selectedCells.contains(id);
 
@@ -30,9 +31,20 @@ abstract class SheetState with _$SheetState {
   bool isColSelected(int col) => selectedCells.any((id) => id.col == col);
 
   bool isRowSelected(int row) => selectedCells.any((id) => id.row == row);
+
+  String? selectedRange() => selectedCells.singleOrNull?.toAddress();
+
+  CellAlign? selectedCellAlign() {
+    return selectedCells.map((e) => getCellData(e).align).toSet().singleOrNull;
+  }
 }
 
 @freezed
 abstract class CellData with _$CellData {
-  const factory CellData({required String value}) = _CellData;
+  const factory CellData({
+    @Default('') String value,
+    @Default(CellAlign.left) CellAlign align,
+  }) = _CellData;
+
+  static const empty = CellData();
 }

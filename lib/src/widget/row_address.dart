@@ -23,7 +23,7 @@ class RowAddress extends ConsumerWidget {
             child: Center(
               child: Text(
                 index.toString(),
-                style: const TextStyle(fontWeight: FontWeight.w500),
+                style: const TextStyle(fontWeight: FontWeight.w300),
               ),
             ),
           ),

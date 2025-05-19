@@ -1,4 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:spread_sheet/src/enums.dart';
 import 'package:spread_sheet/src/models/cell_id.dart';
 import 'package:spread_sheet/src/providers/sheet_state.dart';
 
@@ -42,12 +43,10 @@ class Sheet extends _$Sheet {
   }
 
   void setCellData(CellId id, String value) {
-    state = state.copyWith(
-      data: {
-        ...state.data,
-        id.row: {...?state.data[id.row], id.col: CellData(value: value)},
-      },
-    );
+    final data = {...state.data};
+    final row = data[id.row] ??= {};
+    row[id.col] = row[id.col]?.copyWith(value: value) ?? CellData(value: value);
+    state = state.copyWith(data: data);
   }
 
   void selectCol(int index) {
@@ -64,5 +63,15 @@ class Sheet extends _$Sheet {
         for (int i = 0; i <= state.colCount; i++) CellId(row: index, col: i),
       },
     );
+  }
+
+  void setCellAlign(CellAlign align) {
+    if (state.selectedCells.isEmpty) return;
+    final data = {...state.data};
+    for (final c in state.selectedCells) {
+      final row = data[c.row] ??= {};
+      row[c.col] = row[c.col]?.copyWith(align: align) ?? CellData(align: align);
+    }
+    state = state.copyWith(data: data);
   }
 }

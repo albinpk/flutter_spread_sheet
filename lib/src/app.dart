@@ -5,6 +5,7 @@ import 'package:spread_sheet/src/providers/sheet_provider.dart';
 import 'package:spread_sheet/src/widget/column_address.dart';
 import 'package:spread_sheet/src/widget/row_address.dart';
 import 'package:spread_sheet/src/widget/sheet_cell.dart';
+import 'package:spread_sheet/src/widget/tool_bar.dart';
 import 'package:two_dimensional_scrollables/two_dimensional_scrollables.dart';
 
 class App extends ConsumerWidget {
@@ -18,21 +19,29 @@ class App extends ConsumerWidget {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(8),
-        child: TableView.builder(
-          verticalDetails: const ScrollableDetails.vertical(
-            physics: ClampingScrollPhysics(),
-          ),
-          horizontalDetails: const ScrollableDetails.horizontal(
-            physics: ClampingScrollPhysics(),
-          ),
-          pinnedColumnCount: 1,
-          pinnedRowCount: 1,
-          rowCount: rowCount + 1, // + 1 for title
-          columnCount: colCount,
-          diagonalDragBehavior: DiagonalDragBehavior.free,
-          columnBuilder: (i) => _columnBuilder(i, ref),
-          rowBuilder: (i) => _rowBuilder(i, ref),
-          cellBuilder: _cellBuilder,
+        child: Column(
+          children: [
+            const ToolBar(),
+            const SizedBox(height: 10),
+            Expanded(
+              child: TableView.builder(
+                verticalDetails: const ScrollableDetails.vertical(
+                  physics: ClampingScrollPhysics(),
+                ),
+                horizontalDetails: const ScrollableDetails.horizontal(
+                  physics: ClampingScrollPhysics(),
+                ),
+                pinnedColumnCount: 1,
+                pinnedRowCount: 1,
+                rowCount: rowCount + 1, // + 1 for title
+                columnCount: colCount,
+                diagonalDragBehavior: DiagonalDragBehavior.free,
+                columnBuilder: (i) => _columnBuilder(i, ref),
+                rowBuilder: (i) => _rowBuilder(i, ref),
+                cellBuilder: _cellBuilder,
+              ),
+            ),
+          ],
         ),
       ),
     );

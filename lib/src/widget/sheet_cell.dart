@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:spread_sheet/src/enums.dart';
 import 'package:spread_sheet/src/models/cell_id.dart';
 import 'package:spread_sheet/src/providers/sheet_provider.dart';
 import 'package:spread_sheet/src/providers/sheet_state.dart';
@@ -48,10 +49,21 @@ class SheetCell extends HookConsumerWidget {
                   onChanged: (value) => notifier.setCellData(id, value),
                 )
                 : Align(
-                  alignment: Alignment.centerLeft,
+                  alignment: switch (data.align) {
+                    CellAlign.left => Alignment.centerLeft,
+                    CellAlign.center => Alignment.center,
+                    CellAlign.right => Alignment.centerRight,
+                  },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 4),
-                    child: Text(data?.value ?? ''),
+                    child: Text(
+                      data.value,
+                      textAlign: switch (data.align) {
+                        CellAlign.left => TextAlign.left,
+                        CellAlign.center => TextAlign.center,
+                        CellAlign.right => TextAlign.right,
+                      },
+                    ),
                   ),
                 ),
       ),

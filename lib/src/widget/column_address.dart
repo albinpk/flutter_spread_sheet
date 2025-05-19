@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:spread_sheet/src/providers/sheet_provider.dart';
+import 'package:spread_sheet/src/utils/functions.dart';
 import 'package:spread_sheet/src/widget/drag_handle.dart';
 
 class ColumnAddress extends ConsumerWidget {
@@ -22,8 +23,8 @@ class ColumnAddress extends ConsumerWidget {
             onTap: () => notifier.selectCol(index),
             child: Center(
               child: Text(
-                _getTitle(index),
-                style: const TextStyle(fontWeight: FontWeight.w500),
+                getColumnTitle(index),
+                style: const TextStyle(fontWeight: FontWeight.w300),
               ),
             ),
           ),
@@ -37,14 +38,5 @@ class ColumnAddress extends ConsumerWidget {
         ],
       ),
     );
-  }
-
-  String _getTitle(int index) {
-    const max = 26;
-    final quotient = index ~/ max;
-    final remainder = index % max;
-    return quotient > 0
-        ? _getTitle(quotient - 1) + String.fromCharCode(remainder + 65)
-        : String.fromCharCode(remainder + 65);
   }
 }
