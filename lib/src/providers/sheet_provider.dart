@@ -12,12 +12,20 @@ class Sheet extends _$Sheet {
   }
 
   void focusCell(CellId id) {
-    state = state.copyWith(selectedCell: id);
+    state = state.copyWith(focusedCell: id, selectedCells: {id});
+  }
+
+  void unfocus() => state = state.copyWith(focusedCell: null);
+
+  void selectCell(CellId id, {bool clearAll = true}) {
+    state = state.copyWith(
+      selectedCells: {if (!clearAll) ...state.selectedCells, id},
+    );
   }
 
   void focusDown() {
-    if (state.selectedCell == null) return;
-    focusCell(state.selectedCell!.down);
+    // if (state.selectedCell == null) return;
+    // focusCell(state.selectedCell!.down);
   }
 
   void changeColSize(int col, double size) {

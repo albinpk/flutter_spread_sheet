@@ -12,7 +12,7 @@ class RowAddress extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final notifier = ref.watch(sheetProvider.notifier);
     final selected = ref.watch(
-      sheetProvider.select((v) => v.selectedCell?.row == index),
+      sheetProvider.select((v) => v.isRowSelected(index)),
     );
     return ColoredBox(
       color: selected ? Colors.black26 : Colors.transparent,

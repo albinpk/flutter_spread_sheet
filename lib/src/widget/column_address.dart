@@ -12,7 +12,7 @@ class ColumnAddress extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final notifier = ref.watch(sheetProvider.notifier);
     final selected = ref.watch(
-      sheetProvider.select((v) => v.selectedCell?.col == index),
+      sheetProvider.select((v) => v.isColSelected(index)),
     );
     return ColoredBox(
       color: selected ? Colors.black26 : Colors.transparent,
