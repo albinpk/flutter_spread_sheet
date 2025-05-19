@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:spread_sheet/src/models/cell_id.dart';
 import 'package:spread_sheet/src/providers/sheet_provider.dart';
-import 'package:spread_sheet/src/widget/column_address.dart';
-import 'package:spread_sheet/src/widget/row_address.dart';
+import 'package:spread_sheet/src/widget/column_head.dart';
+import 'package:spread_sheet/src/widget/row_head.dart';
 import 'package:spread_sheet/src/widget/sheet_cell.dart';
 import 'package:spread_sheet/src/widget/tool_bar.dart';
 import 'package:two_dimensional_scrollables/two_dimensional_scrollables.dart';
@@ -79,9 +79,9 @@ class App extends ConsumerWidget {
           vicinity.row == 0 && vicinity.column == 0
               ? const SizedBox.shrink()
               : vicinity.row == 0
-              ? ColumnAddress(index: vicinity.column - 1)
+              ? ColumnHead(index: vicinity.column - 1)
               : vicinity.column == 0
-              ? RowAddress(index: vicinity.row)
+              ? RowHead(index: vicinity.row)
               : SheetCell(
                 id: CellId(row: vicinity.row, col: vicinity.column - 1),
               ),
