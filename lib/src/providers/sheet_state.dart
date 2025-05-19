@@ -11,6 +11,8 @@ abstract class SheetState with _$SheetState {
     @Default({}) Map<int, double> rowSize,
     @Default({}) Map<int, double> colSize,
     @Default({}) Map<int, Map<int, CellData>> data,
+    @Default(100) int rowCount,
+    @Default(30) int colCount,
   }) = _SheetState;
 
   const SheetState._();

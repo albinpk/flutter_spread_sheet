@@ -18,10 +18,13 @@ class ColumnAddress extends ConsumerWidget {
       color: selected ? Colors.black26 : Colors.transparent,
       child: Stack(
         children: [
-          Center(
-            child: Text(
-              _getTitle(index),
-              style: const TextStyle(fontWeight: FontWeight.w500),
+          InkWell(
+            onTap: () => notifier.selectCol(index),
+            child: Center(
+              child: Text(
+                _getTitle(index),
+                style: const TextStyle(fontWeight: FontWeight.w500),
+              ),
             ),
           ),
           Align(

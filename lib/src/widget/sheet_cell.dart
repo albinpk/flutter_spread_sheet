@@ -27,13 +27,17 @@ class SheetCell extends HookConsumerWidget {
       focusColor: Colors.transparent,
       splashColor: Colors.transparent,
       mouseCursor: SystemMouseCursors.basic,
-      onTap: () => notifier.selectCell(id),
-      onDoubleTap: selected ? () => notifier.focusCell(id) : null,
+      onTap: focused ? null : () => notifier.selectCell(id),
+      onDoubleTap: selected & !focused ? () => notifier.focusCell(id) : null,
       child: DecoratedBox(
         decoration: BoxDecoration(
+          color:
+              selected && !focused
+                  ? Colors.black.withValues(alpha: 0.05)
+                  : Colors.transparent,
           border:
               selected
-                  ? Border.all(width: focused ? 1.5 : 0.7)
+                  ? Border.all(width: focused ? 1.5 : 0)
                   : const Border.fromBorderSide(BorderSide.none),
         ),
         child:
@@ -47,7 +51,7 @@ class SheetCell extends HookConsumerWidget {
                   alignment: Alignment.centerLeft,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 4),
-                    child: Text(data?.value ?? '', maxLines: 1),
+                    child: Text(data?.value ?? ''),
                   ),
                 ),
       ),
@@ -71,11 +75,11 @@ class _Input extends HookWidget {
       style: Theme.of(context).textTheme.bodyMedium,
       textAlignVertical: TextAlignVertical.top,
       onTapOutside: (_) => onSubmitted?.call(),
-      onSubmitted: (_) => onSubmitted?.call(),
+      // onSubmitted: (_) => onSubmitted?.call(),
       onChanged: onChanged,
       cursorHeight: 16,
       // expands: true,
-      // maxLines: null,
+      maxLines: null,
       decoration: const InputDecoration(
         isCollapsed: true,
         contentPadding: EdgeInsets.symmetric(horizontal: 4, vertical: 6),

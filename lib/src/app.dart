@@ -12,6 +12,9 @@ class App extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final (rowCount, colCount) = ref.watch(
+      sheetProvider.select((v) => (v.rowCount, v.colCount)),
+    );
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(8),
@@ -24,6 +27,8 @@ class App extends ConsumerWidget {
           ),
           pinnedColumnCount: 1,
           pinnedRowCount: 1,
+          rowCount: rowCount + 1, // + 1 for title
+          columnCount: colCount,
           diagonalDragBehavior: DiagonalDragBehavior.free,
           columnBuilder: (i) => _columnBuilder(i, ref),
           rowBuilder: (i) => _rowBuilder(i, ref),

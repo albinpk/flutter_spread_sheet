@@ -49,4 +49,20 @@ class Sheet extends _$Sheet {
       },
     );
   }
+
+  void selectCol(int index) {
+    state = state.copyWith(
+      selectedCells: {
+        for (int i = 0; i <= state.rowCount; i++) CellId(row: i, col: index),
+      },
+    );
+  }
+
+  void selectRow(int index) {
+    state = state.copyWith(
+      selectedCells: {
+        for (int i = 0; i <= state.colCount; i++) CellId(row: index, col: i),
+      },
+    );
+  }
 }

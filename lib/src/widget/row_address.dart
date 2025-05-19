@@ -18,10 +18,13 @@ class RowAddress extends ConsumerWidget {
       color: selected ? Colors.black26 : Colors.transparent,
       child: Stack(
         children: [
-          Center(
-            child: Text(
-              index.toString(),
-              style: const TextStyle(fontWeight: FontWeight.w500),
+          InkWell(
+            onTap: () => notifier.selectRow(index),
+            child: Center(
+              child: Text(
+                index.toString(),
+                style: const TextStyle(fontWeight: FontWeight.w500),
+              ),
             ),
           ),
           Align(
