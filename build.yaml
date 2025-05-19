@@ -4,7 +4,7 @@ targets:
       freezed:
         generate_for:
           - lib/src/providers/sheet_state.dart
-          - lib/src/models/cell_id.dart
+          - lib/src/models/*.dart
       riverpod_generator:
         generate_for:
           - lib/src/providers/sheet_provider.dart

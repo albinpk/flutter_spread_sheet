@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:spread_sheet/src/enums.dart';
 import 'package:spread_sheet/src/models/cell_id.dart';
+import 'package:spread_sheet/src/models/cell_text_style.dart';
 
 part 'sheet_state.freezed.dart';
 
@@ -37,6 +38,18 @@ abstract class SheetState with _$SheetState {
   CellAlign? selectedCellAlign() {
     return selectedCells.map((e) => getCellData(e).align).toSet().singleOrNull;
   }
+
+  Set<CellTextStyleType> selectedCellTextStyle() {
+    final style = selectedCells.map((e) => getCellData(e).textStyle).toList();
+    final bold = style.map((e) => e.bold).toSet().singleOrNull ?? false;
+    final italic = style.map((e) => e.italic).toSet().singleOrNull ?? false;
+    final strike = style.map((e) => e.strike).toSet().singleOrNull ?? false;
+    return {
+      if (bold) CellTextStyleType.bold,
+      if (italic) CellTextStyleType.italic,
+      if (strike) CellTextStyleType.strike,
+    };
+  }
 }
 
 @freezed
@@ -44,6 +57,7 @@ abstract class CellData with _$CellData {
   const factory CellData({
     @Default('') String value,
     @Default(CellAlign.left) CellAlign align,
+    @Default(CellTextStyle()) CellTextStyle textStyle,
   }) = _CellData;
 
   static const empty = CellData();

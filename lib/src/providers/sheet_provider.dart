@@ -74,4 +74,18 @@ class Sheet extends _$Sheet {
     }
     state = state.copyWith(data: data);
   }
+
+  void setCellTextStyle(Set<CellTextStyleType> type) {
+    if (state.selectedCells.isEmpty) return;
+    final data = {...state.data};
+    for (final c in state.selectedCells) {
+      final row = data[c.row] ??= {};
+      row[c.col] = (row[c.col] ?? CellData.empty).copyWith.textStyle(
+        bold: type.contains(CellTextStyleType.bold),
+        italic: type.contains(CellTextStyleType.italic),
+        strike: type.contains(CellTextStyleType.strike),
+      );
+    }
+    state = state.copyWith(data: data);
+  }
 }

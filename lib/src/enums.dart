@@ -10,3 +10,14 @@ enum CellAlign {
 
   final IconData icon;
 }
+
+/// Text style options for a cell in the spreadsheet.
+enum CellTextStyleType {
+  bold(Icons.format_bold_rounded),
+  italic(Icons.format_italic_rounded),
+  strike(Icons.format_strikethrough_rounded);
+
+  const CellTextStyleType(this.icon);
+
+  final IconData icon;
+}

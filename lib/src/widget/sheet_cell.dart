@@ -48,24 +48,41 @@ class SheetCell extends HookConsumerWidget {
                   onSubmitted: notifier.unfocus,
                   onChanged: (value) => notifier.setCellData(id, value),
                 )
-                : Align(
-                  alignment: switch (data.align) {
-                    CellAlign.left => Alignment.centerLeft,
-                    CellAlign.center => Alignment.center,
-                    CellAlign.right => Alignment.centerRight,
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
-                    child: Text(
-                      data.value,
-                      textAlign: switch (data.align) {
-                        CellAlign.left => TextAlign.left,
-                        CellAlign.center => TextAlign.center,
-                        CellAlign.right => TextAlign.right,
-                      },
-                    ),
-                  ),
-                ),
+                : _View(data: data),
+      ),
+    );
+  }
+}
+
+class _View extends StatelessWidget {
+  const _View({required this.data});
+
+  final CellData data;
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: switch (data.align) {
+        CellAlign.left => Alignment.centerLeft,
+        CellAlign.center => Alignment.center,
+        CellAlign.right => Alignment.centerRight,
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        child: Text(
+          data.value,
+          textAlign: switch (data.align) {
+            CellAlign.left => TextAlign.left,
+            CellAlign.center => TextAlign.center,
+            CellAlign.right => TextAlign.right,
+          },
+          style: TextStyle(
+            fontWeight: data.textStyle.bold ? FontWeight.bold : null,
+            fontStyle: data.textStyle.italic ? FontStyle.italic : null,
+            decoration:
+                data.textStyle.strike ? TextDecoration.lineThrough : null,
+          ),
+        ),
       ),
     );
   }
