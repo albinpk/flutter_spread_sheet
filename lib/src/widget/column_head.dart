@@ -16,8 +16,10 @@ class ColumnHead extends HookConsumerWidget {
     final hover = useState(false);
     final controller = useMemoized(MenuController.new);
     final notifier = ref.watch(sheetProvider.notifier);
-    final selected = ref.watch(
-      sheetProvider.select((v) => v.isColSelected(index)),
+    final (selected, isPinned) = ref.watch(
+      sheetProvider.select(
+        (v) => (v.isColSelected(index), v.pinnedCol == index),
+      ),
     );
     return MouseRegion(
       onEnter: (_) => hover.value = true,
@@ -41,7 +43,11 @@ class ColumnHead extends HookConsumerWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   if (hover.value || controller.isOpen)
-                    _buildMenu(controller, notifier),
+                    _buildMenu(
+                      controller: controller,
+                      notifier: notifier,
+                      pinned: isPinned,
+                    ),
                   DragHandle(
                     axis: Axis.horizontal,
                     onUpdate: (value) => notifier.changeColSize(index, value),
@@ -55,10 +61,22 @@ class ColumnHead extends HookConsumerWidget {
     );
   }
 
-  MenuAnchor _buildMenu(MenuController controller, Sheet notifier) {
+  MenuAnchor _buildMenu({
+    required MenuController controller,
+    required Sheet notifier,
+    required bool pinned,
+  }) {
     return MenuAnchor(
       controller: controller,
       menuChildren: [
+        MenuItemButton(
+          leadingIcon:
+              pinned
+                  ? const Icon(Icons.done, size: 18)
+                  : const SizedBox(width: 18),
+          child: const Text('Freeze'),
+          onPressed: () => notifier.pinCol(pinned ? null : index),
+        ),
         SubmenuButton(
           menuChildren: [
             MenuItemButton(

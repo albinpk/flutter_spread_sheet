@@ -109,4 +109,8 @@ class Sheet extends _$Sheet {
       data: sorted.asMap().map((k, v) => MapEntry(k + 1, v)),
     );
   }
+
+  void pinCol(int? index) {
+    state = state.copyWith(pinnedCol: index);
+  }
 }
