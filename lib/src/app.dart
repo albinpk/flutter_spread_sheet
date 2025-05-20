@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:spread_sheet/src/models/cell_id.dart';
 import 'package:spread_sheet/src/providers/sheet_provider.dart';
 import 'package:spread_sheet/src/widget/column_head.dart';
+import 'package:spread_sheet/src/widget/first_cell.dart';
 import 'package:spread_sheet/src/widget/row_head.dart';
 import 'package:spread_sheet/src/widget/sheet_cell.dart';
 import 'package:spread_sheet/src/widget/tool_bar.dart';
@@ -85,7 +86,7 @@ class App extends ConsumerWidget {
     return TableViewCell(
       child:
           vicinity.row == 0 && vicinity.column == 0
-              ? const SizedBox.shrink()
+              ? const FirstCell()
               : vicinity.row == 0
               ? ColumnHead(index: vicinity.column - 1)
               : vicinity.column == 0
