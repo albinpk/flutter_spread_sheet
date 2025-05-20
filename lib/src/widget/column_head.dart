@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:spread_sheet/src/providers/sheet_provider.dart';
+import 'package:spread_sheet/src/utils/extensions.dart';
 import 'package:spread_sheet/src/utils/functions.dart';
 import 'package:spread_sheet/src/widget/drag_handle.dart';
 
@@ -22,7 +23,7 @@ class ColumnHead extends HookConsumerWidget {
       onEnter: (_) => hover.value = true,
       onExit: (_) => hover.value = false,
       child: ColoredBox(
-        color: selected ? Colors.black26 : Colors.transparent,
+        color: selected ? context.cs.primaryContainer : Colors.transparent,
         child: Stack(
           children: [
             InkWell(

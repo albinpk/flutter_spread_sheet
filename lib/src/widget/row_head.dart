@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:spread_sheet/src/providers/sheet_provider.dart';
+import 'package:spread_sheet/src/utils/extensions.dart';
 import 'package:spread_sheet/src/widget/drag_handle.dart';
 
 class RowHead extends ConsumerWidget {
@@ -15,7 +16,7 @@ class RowHead extends ConsumerWidget {
       sheetProvider.select((v) => v.isRowSelected(index)),
     );
     return ColoredBox(
-      color: selected ? Colors.black26 : Colors.transparent,
+      color: selected ? context.cs.primaryContainer : Colors.transparent,
       child: Stack(
         children: [
           InkWell(

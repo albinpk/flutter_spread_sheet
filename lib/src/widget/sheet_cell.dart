@@ -5,6 +5,7 @@ import 'package:spread_sheet/src/enums.dart';
 import 'package:spread_sheet/src/models/cell_id.dart';
 import 'package:spread_sheet/src/providers/sheet_provider.dart';
 import 'package:spread_sheet/src/providers/sheet_state.dart';
+import 'package:spread_sheet/src/utils/extensions.dart';
 
 class SheetCell extends HookConsumerWidget {
   const SheetCell({required this.id, super.key});
@@ -34,11 +35,14 @@ class SheetCell extends HookConsumerWidget {
         decoration: BoxDecoration(
           color:
               selected && !focused
-                  ? Colors.black.withValues(alpha: 0.05)
+                  ? context.cs.primaryContainer
                   : Colors.transparent,
           border:
               selected
-                  ? Border.all(width: focused ? 1.5 : 0)
+                  ? Border.all(
+                    width: focused ? 1.5 : 0,
+                    color: context.cs.primary,
+                  )
                   : const Border.fromBorderSide(BorderSide.none),
         ),
         child:
