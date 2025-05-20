@@ -114,6 +114,10 @@ class Sheet extends _$Sheet {
     state = state.copyWith(pinnedCol: index);
   }
 
+  void pinRow(int? index) {
+    state = state.copyWith(pinnedRow: index);
+  }
+
   void selectAllCell() {
     state = state.copyWith(
       selectedCells: {

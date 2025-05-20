@@ -14,8 +14,10 @@ class App extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final (rowCount, colCount, pinnedCol) = ref.watch(
-      sheetProvider.select((v) => (v.rowCount, v.colCount, v.pinnedCol)),
+    final (rowCount, colCount, pinnedCol, pinnedRow) = ref.watch(
+      sheetProvider.select(
+        (v) => (v.rowCount, v.colCount, v.pinnedCol, v.pinnedRow),
+      ),
     );
     return Scaffold(
       body: Padding(
@@ -33,7 +35,7 @@ class App extends ConsumerWidget {
                   physics: ClampingScrollPhysics(),
                 ),
                 pinnedColumnCount: pinnedCol == null ? 1 : pinnedCol + 2,
-                pinnedRowCount: 1,
+                pinnedRowCount: pinnedRow == null ? 1 : pinnedRow + 1,
                 rowCount: rowCount + 1, // + 1 for title
                 columnCount: colCount,
                 diagonalDragBehavior: DiagonalDragBehavior.free,
@@ -71,13 +73,21 @@ class App extends ConsumerWidget {
   }
 
   TableSpan _rowBuilder(int index, WidgetRef ref) {
-    final size = ref.watch(
-      sheetProvider.select((v) => v.getRowSize(index - 1)),
+    final (size, pinned) = ref.watch(
+      sheetProvider.select(
+        (v) => (v.getRowSize(index - 1), v.pinnedRow == index),
+      ),
     );
     return TableSpan(
       extent: FixedSpanExtent(size),
-      backgroundDecoration: const SpanDecoration(
-        border: SpanBorder(leading: _border, trailing: _border),
+      backgroundDecoration: SpanDecoration(
+        border: SpanBorder(
+          leading: _border,
+          trailing:
+              pinned
+                  ? _border.copyWith(width: 2, color: Colors.black26)
+                  : _border,
+        ),
       ),
     );
   }

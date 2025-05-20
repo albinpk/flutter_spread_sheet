@@ -30,6 +30,7 @@ class ColumnHead extends HookConsumerWidget {
           children: [
             InkWell(
               onTap: () => notifier.selectCol(index),
+              onSecondaryTap: controller.open,
               child: Center(
                 child: Text(
                   getColumnTitle(index),

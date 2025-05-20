@@ -27,6 +27,7 @@ abstract class SheetState with _$SheetState {
     @Default(100) int rowCount,
     @Default(27) int colCount,
     int? pinnedCol,
+    int? pinnedRow,
   }) = _SheetState;
 
   const SheetState._();
