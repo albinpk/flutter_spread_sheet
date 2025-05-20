@@ -29,8 +29,13 @@ class SheetCell extends HookConsumerWidget {
       focusColor: Colors.transparent,
       splashColor: Colors.transparent,
       mouseCursor: SystemMouseCursors.basic,
-      onTap: focused ? null : () => notifier.selectCell(id),
-      onDoubleTap: selected & !focused ? () => notifier.focusCell(id) : null,
+      onTap:
+          focused
+              ? null
+              : () {
+                selected ? notifier.focusCell(id) : notifier.selectCell(id);
+              },
+      // onDoubleTap: selected & !focused ? () => notifier.focusCell(id) : null,
       child: DecoratedBox(
         decoration: BoxDecoration(
           color:
