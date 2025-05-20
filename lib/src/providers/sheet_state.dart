@@ -5,6 +5,10 @@ import 'package:spread_sheet/src/models/cell_text_style.dart';
 
 part 'sheet_state.freezed.dart';
 
+typedef SheetRowData = Map<int, CellData>;
+
+typedef SheetData = Map<int, SheetRowData>;
+
 @freezed
 abstract class SheetState with _$SheetState {
   const factory SheetState({
@@ -12,7 +16,14 @@ abstract class SheetState with _$SheetState {
     @Default({}) Set<CellId> selectedCells,
     @Default({}) Map<int, double> rowSize,
     @Default({}) Map<int, double> colSize,
-    @Default({}) Map<int, Map<int, CellData>> data,
+    @Default({
+      // 1: {0: CellData(value: 'b'), 1: CellData(value: '1')},
+      // 2: {0: CellData(value: 'a'), 1: CellData(value: '5')},
+      // 3: {0: CellData(value: 'c'), 1: CellData(value: '9')},
+      // 4: {0: CellData(value: 'e'), 1: CellData(value: '4')},
+      // 5: {0: CellData(value: 'd'), 1: CellData(value: '2')},
+    })
+    SheetData data,
     @Default(100) int rowCount,
     @Default(27) int colCount,
   }) = _SheetState;
@@ -61,4 +72,11 @@ abstract class CellData with _$CellData {
   }) = _CellData;
 
   static const empty = CellData();
+}
+
+extension SheetDataX on SheetData {
+  /// Deep clone the sheet data
+  SheetData clone() => {
+    ...map((k, v) => MapEntry(k, {...v})),
+  };
 }

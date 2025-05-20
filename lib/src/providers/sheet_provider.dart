@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:spread_sheet/src/enums.dart';
 import 'package:spread_sheet/src/models/cell_id.dart';
@@ -43,7 +44,7 @@ class Sheet extends _$Sheet {
   }
 
   void setCellData(CellId id, String value) {
-    final data = {...state.data};
+    final data = state.data.clone();
     final row = data[id.row] ??= {};
     row[id.col] = row[id.col]?.copyWith(value: value) ?? CellData(value: value);
     state = state.copyWith(data: data);
@@ -67,7 +68,7 @@ class Sheet extends _$Sheet {
 
   void setCellAlign(CellAlign align) {
     if (state.selectedCells.isEmpty) return;
-    final data = {...state.data};
+    final data = state.data.clone();
     for (final c in state.selectedCells) {
       final row = data[c.row] ??= {};
       row[c.col] = row[c.col]?.copyWith(align: align) ?? CellData(align: align);
@@ -77,7 +78,7 @@ class Sheet extends _$Sheet {
 
   void setCellTextStyle(Set<CellTextStyleType> type) {
     if (state.selectedCells.isEmpty) return;
-    final data = {...state.data};
+    final data = state.data.clone();
     for (final c in state.selectedCells) {
       final row = data[c.row] ??= {};
       row[c.col] = (row[c.col] ?? CellData.empty).copyWith.textStyle(
@@ -87,5 +88,25 @@ class Sheet extends _$Sheet {
       );
     }
     state = state.copyWith(data: data);
+  }
+
+  void sortCol(int index, {required bool asc}) {
+    final data = state.data.clone();
+    final sorted = data.values.sorted((a, b) {
+      final aData = a[index];
+      final bData = b[index];
+      if (aData == null ||
+          bData == null ||
+          aData.value.isEmpty ||
+          bData.value.isEmpty) {
+        return 0;
+      }
+      return asc
+          ? aData.value.compareTo(bData.value)
+          : bData.value.compareTo(aData.value);
+    });
+    state = state.copyWith(
+      data: sorted.asMap().map((k, v) => MapEntry(k + 1, v)),
+    );
   }
 }
