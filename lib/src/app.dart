@@ -20,6 +20,7 @@ class App extends ConsumerWidget {
       ),
     );
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.all(8),
         child: Column(
@@ -60,7 +61,7 @@ class App extends ConsumerWidget {
     );
     return TableSpan(
       extent: index == 0 ? const FixedSpanExtent(40) : FixedSpanExtent(size),
-      backgroundDecoration: SpanDecoration(
+      foregroundDecoration: SpanDecoration(
         border: SpanBorder(
           leading: _border,
           trailing:
@@ -80,7 +81,7 @@ class App extends ConsumerWidget {
     );
     return TableSpan(
       extent: FixedSpanExtent(size),
-      backgroundDecoration: SpanDecoration(
+      foregroundDecoration: SpanDecoration(
         border: SpanBorder(
           leading: _border,
           trailing:

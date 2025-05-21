@@ -25,39 +25,39 @@ class SheetCell extends HookConsumerWidget {
       // if (next.selectedCell == id) focusNode.requestFocus();
     });
 
-    return InkWell(
-      focusColor: Colors.transparent,
-      splashColor: Colors.transparent,
-      mouseCursor: SystemMouseCursors.basic,
-      onTap:
-          focused
-              ? null
-              : () {
-                selected ? notifier.focusCell(id) : notifier.selectCell(id);
-              },
-      // onDoubleTap: selected & !focused ? () => notifier.focusCell(id) : null,
-      child: DecoratedBox(
+    return Material(
+      type: MaterialType.transparency,
+      child: Ink(
         decoration: BoxDecoration(
-          color:
-              selected && !focused
-                  ? context.cs.primaryContainer
-                  : Colors.transparent,
+          color: data.cellStyle.bgColor,
           border:
               selected
                   ? Border.all(
-                    width: focused ? 1.5 : 0,
+                    width: focused ? 2 : 1,
                     color: context.cs.primary,
                   )
                   : const Border.fromBorderSide(BorderSide.none),
         ),
-        child:
-            focused
-                ? _Input(
-                  data: data,
-                  onSubmitted: notifier.unfocus,
-                  onChanged: (value) => notifier.setCellData(id, value),
-                )
-                : _View(data: data),
+        child: InkWell(
+          focusColor: Colors.transparent,
+          splashColor: Colors.transparent,
+          mouseCursor: SystemMouseCursors.basic,
+          onTap:
+              focused
+                  ? null
+                  : () {
+                    selected ? notifier.focusCell(id) : notifier.selectCell(id);
+                  },
+          // onDoubleTap: selected & !focused ? () => notifier.focusCell(id) : null,
+          child:
+              focused
+                  ? _Input(
+                    data: data,
+                    onSubmitted: notifier.unfocus,
+                    onChanged: (value) => notifier.setCellData(id, value),
+                  )
+                  : _View(data: data),
+        ),
       ),
     );
   }
@@ -70,6 +70,7 @@ class _View extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final style = data.textStyle;
     return Align(
       alignment: switch (data.align) {
         CellAlign.left => Alignment.centerLeft,
@@ -86,10 +87,11 @@ class _View extends StatelessWidget {
             CellAlign.right => TextAlign.right,
           },
           style: TextStyle(
-            fontWeight: data.textStyle.bold ? FontWeight.bold : null,
-            fontStyle: data.textStyle.italic ? FontStyle.italic : null,
-            decoration:
-                data.textStyle.strike ? TextDecoration.lineThrough : null,
+            fontSize: 16,
+            color: style.color,
+            fontWeight: style.bold ? FontWeight.bold : null,
+            fontStyle: style.italic ? FontStyle.italic : null,
+            decoration: style.strike ? TextDecoration.lineThrough : null,
           ),
         ),
       ),
@@ -107,10 +109,23 @@ class _Input extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final controller = useTextEditingController(text: data?.value);
+    final style = data?.textStyle;
     return TextField(
       controller: controller,
       autofocus: true,
-      style: Theme.of(context).textTheme.bodyMedium,
+      textAlign: switch (data?.align) {
+        CellAlign.left => TextAlign.left,
+        CellAlign.center => TextAlign.center,
+        CellAlign.right => TextAlign.right,
+        null => TextAlign.start,
+      },
+      style: TextStyle(
+        fontSize: 16,
+        color: style?.color,
+        fontWeight: style?.bold ?? false ? FontWeight.bold : null,
+        fontStyle: style?.italic ?? false ? FontStyle.italic : null,
+        decoration: style?.strike ?? false ? TextDecoration.lineThrough : null,
+      ),
       textAlignVertical: TextAlignVertical.top,
       onTapOutside: (_) => onSubmitted?.call(),
       // onSubmitted: (_) => onSubmitted?.call(),

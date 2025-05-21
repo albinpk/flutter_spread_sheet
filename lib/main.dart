@@ -19,6 +19,9 @@ class Root extends StatelessWidget {
           // border: OutlineInputBorder(borderSide: BorderSide.none),
           // focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.zero),
         ),
+        iconButtonTheme: IconButtonThemeData(
+          style: IconButton.styleFrom(iconSize: 18),
+        ),
       ),
     );
   }

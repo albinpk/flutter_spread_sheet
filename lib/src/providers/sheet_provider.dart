@@ -1,7 +1,11 @@
+import 'dart:ui';
+
 import 'package:collection/collection.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:spread_sheet/src/enums.dart';
 import 'package:spread_sheet/src/models/cell_id.dart';
+import 'package:spread_sheet/src/models/cell_style.dart';
+import 'package:spread_sheet/src/models/cell_text_style.dart';
 import 'package:spread_sheet/src/providers/sheet_state.dart';
 
 part 'sheet_provider.g.dart';
@@ -127,5 +131,30 @@ class Sheet extends _$Sheet {
           for (int j = 0; j <= state.colCount; j++) CellId(row: i, col: j),
       },
     );
+  }
+
+  void setCellColor(Color color) {
+    if (state.selectedCells.isEmpty) return;
+    final data = state.data.clone();
+    for (final c in state.selectedCells) {
+      final row = data[c.row] ??= {};
+      row[c.col] =
+          row[c.col]?.copyWith.cellStyle(bgColor: color) ??
+          CellData(cellStyle: CellStyle(bgColor: color));
+    }
+    state = state.copyWith(data: data);
+  }
+
+  void setTextColor(Color color) {
+    if (state.selectedCells.isEmpty) return;
+    final data = state.data.clone();
+    // TODO(albin): extract and reuse
+    for (final c in state.selectedCells) {
+      final row = data[c.row] ??= {};
+      row[c.col] =
+          row[c.col]?.copyWith.textStyle(color: color) ??
+          CellData(textStyle: CellTextStyle(color: color));
+    }
+    state = state.copyWith(data: data);
   }
 }

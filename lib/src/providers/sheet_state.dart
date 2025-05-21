@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:spread_sheet/src/enums.dart';
 import 'package:spread_sheet/src/models/cell_id.dart';
+import 'package:spread_sheet/src/models/cell_style.dart';
 import 'package:spread_sheet/src/models/cell_text_style.dart';
 
 part 'sheet_state.freezed.dart';
@@ -74,6 +75,7 @@ abstract class CellData with _$CellData {
     @Default('') String value,
     @Default(CellAlign.left) CellAlign align,
     @Default(CellTextStyle()) CellTextStyle textStyle,
+    @Default(CellStyle()) CellStyle cellStyle,
   }) = _CellData;
 
   static const empty = CellData();
