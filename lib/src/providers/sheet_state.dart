@@ -22,6 +22,9 @@ abstract class SheetState with _$SheetState {
       // 3: {0: CellData(value: 'c'), 1: CellData(value: '9')},
       // 4: {0: CellData(value: 'e'), 1: CellData(value: '4')},
       // 5: {0: CellData(value: 'd'), 1: CellData(value: '2')},
+      // 7: {1: CellData(value: '1')},
+      // 8: {0: CellData(value: 'z'), 1: CellData(value: '2')},
+      // 9: {1: CellData(value: '3')},
     })
     SheetData data,
     @Default(100) int rowCount,
