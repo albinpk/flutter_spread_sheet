@@ -11,7 +11,11 @@ part 'sheet_provider.g.dart';
 @riverpod
 class Sheet extends _$Sheet {
   @override
-  SheetState build() => const SheetState();
+  SheetState build() {
+    return SheetState(
+      selectedCells: {const CellId(row: 1, col: 0)},
+    );
+  }
 
   void focusCell(CellId id) {
     state = state.copyWith(focusedCell: id, selectedCells: {id});
