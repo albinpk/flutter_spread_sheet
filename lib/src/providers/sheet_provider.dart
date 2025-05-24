@@ -4,8 +4,6 @@ import 'package:collection/collection.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:spread_sheet/src/enums.dart';
 import 'package:spread_sheet/src/models/cell_id.dart';
-import 'package:spread_sheet/src/models/cell_style.dart';
-import 'package:spread_sheet/src/models/cell_text_style.dart';
 import 'package:spread_sheet/src/providers/sheet_state.dart';
 
 part 'sheet_provider.g.dart';
@@ -13,9 +11,7 @@ part 'sheet_provider.g.dart';
 @riverpod
 class Sheet extends _$Sheet {
   @override
-  SheetState build() {
-    return const SheetState();
-  }
+  SheetState build() => const SheetState();
 
   void focusCell(CellId id) {
     state = state.copyWith(focusedCell: id, selectedCells: {id});
@@ -71,27 +67,17 @@ class Sheet extends _$Sheet {
   }
 
   void setCellAlign(CellAlign align) {
-    if (state.selectedCells.isEmpty) return;
-    final data = state.data.clone();
-    for (final c in state.selectedCells) {
-      final row = data[c.row] ??= {};
-      row[c.col] = row[c.col]?.copyWith(align: align) ?? CellData(align: align);
-    }
-    state = state.copyWith(data: data);
+    _updateSelectedCells((cell) => cell.copyWith(align: align));
   }
 
   void setCellTextStyle(Set<CellTextStyleType> type) {
-    if (state.selectedCells.isEmpty) return;
-    final data = state.data.clone();
-    for (final c in state.selectedCells) {
-      final row = data[c.row] ??= {};
-      row[c.col] = (row[c.col] ?? CellData.empty).copyWith.textStyle(
+    _updateSelectedCells(
+      (cell) => cell.copyWith.textStyle(
         bold: type.contains(CellTextStyleType.bold),
         italic: type.contains(CellTextStyleType.italic),
         strike: type.contains(CellTextStyleType.strike),
-      );
-    }
-    state = state.copyWith(data: data);
+      ),
+    );
   }
 
   void sortCol(int index, {required bool asc}) {
@@ -134,26 +120,19 @@ class Sheet extends _$Sheet {
   }
 
   void setCellColor(Color color) {
-    if (state.selectedCells.isEmpty) return;
-    final data = state.data.clone();
-    for (final c in state.selectedCells) {
-      final row = data[c.row] ??= {};
-      row[c.col] =
-          row[c.col]?.copyWith.cellStyle(bgColor: color) ??
-          CellData(cellStyle: CellStyle(bgColor: color));
-    }
-    state = state.copyWith(data: data);
+    _updateSelectedCells((cell) => cell.copyWith.cellStyle(bgColor: color));
   }
 
   void setTextColor(Color color) {
+    _updateSelectedCells((cell) => cell.copyWith.textStyle(color: color));
+  }
+
+  void _updateSelectedCells(CellData Function(CellData cell) fn) {
     if (state.selectedCells.isEmpty) return;
     final data = state.data.clone();
-    // TODO(albin): extract and reuse
     for (final c in state.selectedCells) {
       final row = data[c.row] ??= {};
-      row[c.col] =
-          row[c.col]?.copyWith.textStyle(color: color) ??
-          CellData(textStyle: CellTextStyle(color: color));
+      row[c.col] = fn(row[c.col] ?? CellData.empty);
     }
     state = state.copyWith(data: data);
   }
