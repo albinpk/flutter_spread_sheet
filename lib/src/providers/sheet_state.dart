@@ -32,6 +32,8 @@ abstract class SheetState with _$SheetState {
     @Default(27) int colCount,
     int? pinnedCol,
     int? pinnedRow,
+    @Default(false) bool isDragging,
+    CellId? dragStartCell,
   }) = _SheetState;
 
   const SheetState._();

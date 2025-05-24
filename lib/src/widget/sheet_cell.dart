@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:spread_sheet/src/enums.dart';
@@ -15,15 +16,21 @@ class SheetCell extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final notifier = ref.watch(sheetProvider.notifier);
-    final (selected, data, focused) = ref.watch(
+    final (
+      selected,
+      data,
+      focused,
+      isDragging,
+    ) = ref.watch(
       sheetProvider.select((v) {
-        return (v.isCellSelected(id), v.getCellData(id), v.isCellFocused(id));
+        return (
+          v.isCellSelected(id),
+          v.getCellData(id),
+          v.isCellFocused(id),
+          v.isDragging,
+        );
       }),
     );
-
-    ref.listen(sheetProvider, (_, next) {
-      // if (next.selectedCell == id) focusNode.requestFocus();
-    });
 
     return Material(
       type: MaterialType.transparency,
@@ -34,23 +41,55 @@ class SheetCell extends HookConsumerWidget {
               ? Border.all(width: focused ? 2 : 1, color: context.cs.primary)
               : const Border.fromBorderSide(BorderSide.none),
         ),
-        child: InkWell(
-          focusColor: Colors.transparent,
-          splashColor: Colors.transparent,
-          mouseCursor: SystemMouseCursors.basic,
-          onTap: focused
-              ? null
-              : () {
-                  selected ? notifier.focusCell(id) : notifier.selectCell(id);
-                },
-          // onDoubleTap: selected & !focused ? () => notifier.focusCell(id) : null,
-          child: focused
-              ? _Input(
-                  data: data,
-                  onSubmitted: notifier.unfocus,
-                  onChanged: (value) => notifier.setCellData(id, value),
-                )
-              : _View(data: data),
+        child: GestureDetector(
+          // TODO(albin): https://github.com/flutter/flutter/issues/169411
+          // onPanStart: isDragging
+          //     ? null
+          //     : (_) {
+          //         'start'.logger();
+          //         notifier.startDragging(id);
+          //       },
+          // onPanEnd: isDragging
+          //     ? (_) {
+          //         'end'.logger();
+          //         notifier.stopDragging();
+          //       }
+          //     : null,
+          // onPanCancel: isDragging
+          //     ? () {
+          //         'cancel'.logger();
+          //         notifier.stopDragging();
+          //       }
+          //     : null,
+          child: InkWell(
+            focusColor: Colors.transparent,
+            splashColor: Colors.transparent,
+            mouseCursor: SystemMouseCursors.basic,
+            // onHover: (_) {
+            //   if (ref.read(sheetProvider).isDragging) {
+            //     notifier.dragHover(id);
+            //   }
+            // },
+            onTap: focused
+                ? null
+                : () {
+                    if (selected) return notifier.focusCell(id);
+                    notifier.selectCell(
+                      id,
+                      clearAll: context.platform == TargetPlatform.macOS
+                          ? !HardwareKeyboard.instance.isMetaPressed
+                          : !HardwareKeyboard.instance.isControlPressed,
+                    );
+                  },
+            // onDoubleTap: selected & !focused ? () => notifier.focusCell(id) : null,
+            child: focused
+                ? _Input(
+                    data: data,
+                    onSubmitted: notifier.unfocus,
+                    onChanged: (value) => notifier.setCellData(id, value),
+                  )
+                : _View(data: data),
+          ),
         ),
       ),
     );

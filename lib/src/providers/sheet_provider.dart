@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:collection/collection.dart';
@@ -138,5 +139,31 @@ class Sheet extends _$Sheet {
       row[c.col] = fn(row[c.col] ?? CellData.empty);
     }
     state = state.copyWith(data: data);
+  }
+
+  void startDragging(CellId id) {
+    state = state.copyWith(
+      isDragging: true,
+      dragStartCell: id,
+      selectedCells: {id},
+    );
+  }
+
+  void dragHover(CellId id) {
+    if (state.dragStartCell == null) return;
+    final minRow = min(state.dragStartCell!.row, id.row);
+    final maxRow = max(state.dragStartCell!.row, id.row);
+    final minCol = min(state.dragStartCell!.col, id.col);
+    final maxCol = max(state.dragStartCell!.col, id.col);
+    state = state.copyWith(
+      selectedCells: {
+        for (int i = minRow; i <= maxRow; i++)
+          for (int j = minCol; j <= maxCol; j++) CellId(row: i, col: j),
+      },
+    );
+  }
+
+  void stopDragging() {
+    state = state.copyWith(isDragging: false, dragStartCell: null);
   }
 }
