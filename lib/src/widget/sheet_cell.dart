@@ -30,33 +30,27 @@ class SheetCell extends HookConsumerWidget {
       child: Ink(
         decoration: BoxDecoration(
           color: data.cellStyle.bgColor,
-          border:
-              selected
-                  ? Border.all(
-                    width: focused ? 2 : 1,
-                    color: context.cs.primary,
-                  )
-                  : const Border.fromBorderSide(BorderSide.none),
+          border: selected
+              ? Border.all(width: focused ? 2 : 1, color: context.cs.primary)
+              : const Border.fromBorderSide(BorderSide.none),
         ),
         child: InkWell(
           focusColor: Colors.transparent,
           splashColor: Colors.transparent,
           mouseCursor: SystemMouseCursors.basic,
-          onTap:
-              focused
-                  ? null
-                  : () {
-                    selected ? notifier.focusCell(id) : notifier.selectCell(id);
-                  },
+          onTap: focused
+              ? null
+              : () {
+                  selected ? notifier.focusCell(id) : notifier.selectCell(id);
+                },
           // onDoubleTap: selected & !focused ? () => notifier.focusCell(id) : null,
-          child:
-              focused
-                  ? _Input(
-                    data: data,
-                    onSubmitted: notifier.unfocus,
-                    onChanged: (value) => notifier.setCellData(id, value),
-                  )
-                  : _View(data: data),
+          child: focused
+              ? _Input(
+                  data: data,
+                  onSubmitted: notifier.unfocus,
+                  onChanged: (value) => notifier.setCellData(id, value),
+                )
+              : _View(data: data),
         ),
       ),
     );

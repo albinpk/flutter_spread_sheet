@@ -6,3 +6,6 @@ analyzer:
 
   plugins:
     - custom_lint
+
+formatter:
+  trailing_commas: preserve

@@ -28,16 +28,15 @@ class ToolBar extends ConsumerWidget {
 
           // text align
           SegmentedButton<CellAlign>(
-            segments:
-                CellAlign.values
-                    .map(
-                      (e) => ButtonSegment(
-                        value: e,
-                        icon: Icon(e.icon),
-                        tooltip: 'Align ${e.name}',
-                      ),
-                    )
-                    .toList(),
+            segments: CellAlign.values
+                .map(
+                  (e) => ButtonSegment(
+                    value: e,
+                    icon: Icon(e.icon),
+                    tooltip: 'Align ${e.name}',
+                  ),
+                )
+                .toList(),
             selected: {if (state.selectedCellAlign() case final align?) align},
             showSelectedIcon: false,
             emptySelectionAllowed: true,
@@ -50,10 +49,9 @@ class ToolBar extends ConsumerWidget {
 
           // text style
           SegmentedButton<CellTextStyleType>(
-            segments:
-                CellTextStyleType.values
-                    .map((e) => ButtonSegment(value: e, icon: Icon(e.icon)))
-                    .toList(),
+            segments: CellTextStyleType.values
+                .map((e) => ButtonSegment(value: e, icon: Icon(e.icon)))
+                .toList(),
             selected: state.selectedCellTextStyle(),
             multiSelectionEnabled: true,
             showSelectedIcon: false,

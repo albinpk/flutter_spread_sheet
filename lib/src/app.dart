@@ -64,10 +64,9 @@ class App extends ConsumerWidget {
       foregroundDecoration: SpanDecoration(
         border: SpanBorder(
           leading: _border,
-          trailing:
-              pinned
-                  ? _border.copyWith(width: 2, color: Colors.black26)
-                  : _border,
+          trailing: pinned
+              ? _border.copyWith(width: 2, color: Colors.black26)
+              : _border,
         ),
       ),
     );
@@ -84,10 +83,9 @@ class App extends ConsumerWidget {
       foregroundDecoration: SpanDecoration(
         border: SpanBorder(
           leading: _border,
-          trailing:
-              pinned
-                  ? _border.copyWith(width: 2, color: Colors.black26)
-                  : _border,
+          trailing: pinned
+              ? _border.copyWith(width: 2, color: Colors.black26)
+              : _border,
         ),
       ),
     );
@@ -95,16 +93,15 @@ class App extends ConsumerWidget {
 
   TableViewCell _cellBuilder(BuildContext context, TableVicinity vicinity) {
     return TableViewCell(
-      child:
-          vicinity.row == 0 && vicinity.column == 0
-              ? const FirstCell()
-              : vicinity.row == 0
-              ? ColumnHead(index: vicinity.column - 1)
-              : vicinity.column == 0
-              ? RowHead(index: vicinity.row)
-              : SheetCell(
-                id: CellId(row: vicinity.row, col: vicinity.column - 1),
-              ),
+      child: vicinity.row == 0 && vicinity.column == 0
+          ? const FirstCell()
+          : vicinity.row == 0
+          ? ColumnHead(index: vicinity.column - 1)
+          : vicinity.column == 0
+          ? RowHead(index: vicinity.row)
+          : SheetCell(
+              id: CellId(row: vicinity.row, col: vicinity.column - 1),
+            ),
     );
   }
 }

@@ -71,10 +71,9 @@ class ColumnHead extends HookConsumerWidget {
       controller: controller,
       menuChildren: [
         MenuItemButton(
-          leadingIcon:
-              pinned
-                  ? const Icon(Icons.done, size: 18)
-                  : const SizedBox(width: 18),
+          leadingIcon: pinned
+              ? const Icon(Icons.done, size: 18)
+              : const SizedBox(width: 18),
           child: const Text('Freeze'),
           onPressed: () => notifier.pinCol(pinned ? null : index),
         ),

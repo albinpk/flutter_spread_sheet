@@ -86,17 +86,16 @@ class Sheet extends _$Sheet {
       (e) => e[index]?.value.isNotEmpty ?? false,
     );
     final empty = data.values.where((e) => e[index]?.value.isEmpty ?? true);
-    final sorted =
-        nonEmpty
-            .sorted((a, b) {
-              final aData = a[index]!;
-              final bData = b[index]!;
-              return asc
-                  ? aData.value.compareTo(bData.value)
-                  : bData.value.compareTo(aData.value);
-            })
-            .followedBy(empty)
-            .toList();
+    final sorted = nonEmpty
+        .sorted((a, b) {
+          final aData = a[index]!;
+          final bData = b[index]!;
+          return asc
+              ? aData.value.compareTo(bData.value)
+              : bData.value.compareTo(aData.value);
+        })
+        .followedBy(empty)
+        .toList();
     state = state.copyWith(
       data: sorted.asMap().map((k, v) => MapEntry(k + 1, v)),
     );

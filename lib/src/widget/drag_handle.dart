@@ -12,27 +12,25 @@ class DragHandle extends HookWidget {
     final hovering = useState(false);
     final isVertical = axis == Axis.vertical;
     return MouseRegion(
-      cursor:
-          isVertical
-              ? SystemMouseCursors.resizeRow
-              : SystemMouseCursors.resizeColumn,
+      cursor: isVertical
+          ? SystemMouseCursors.resizeRow
+          : SystemMouseCursors.resizeColumn,
       onEnter: (_) => hovering.value = true,
       onExit: (_) => hovering.value = false,
       child: GestureDetector(
         onHorizontalDragUpdate: isVertical ? null : _onDrag,
         onVerticalDragUpdate: isVertical ? _onDrag : null,
-        child:
-            isVertical
-                ? Divider(
-                  height: 5,
-                  thickness: 5,
-                  color: hovering.value ? Colors.black45 : Colors.transparent,
-                )
-                : VerticalDivider(
-                  width: 5,
-                  thickness: 5,
-                  color: hovering.value ? Colors.black45 : Colors.transparent,
-                ),
+        child: isVertical
+            ? Divider(
+                height: 5,
+                thickness: 5,
+                color: hovering.value ? Colors.black45 : Colors.transparent,
+              )
+            : VerticalDivider(
+                width: 5,
+                thickness: 5,
+                color: hovering.value ? Colors.black45 : Colors.transparent,
+              ),
       ),
     );
   }
