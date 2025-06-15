@@ -1,3 +1,5 @@
 # spread_sheet
 
-A new Flutter project.
+Spreadsheet with editable cells
+
+![Flutter spreadsheet image](docs/thumbnail.jpg)
